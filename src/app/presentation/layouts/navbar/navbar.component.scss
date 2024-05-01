@@ -22,13 +22,3 @@ nav li {
 button:focus {
   outline: none;
 }
-
-/* Ensure matTooltip appears above other elements */
-.mat-tooltip {
-  z-index: 1000; /* Adjust as needed */
-}
-
-.tooltip-button {
-  position: relative;
-  z-index: 1; /* Ensure button has a lower z-index than matTooltip */
-}
