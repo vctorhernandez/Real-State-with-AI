@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
 
   dataSource: MatTableDataSource<IRequestDTO> = new MatTableDataSource<IRequestDTO>();
   allRequests: any;
-
+  items: any[] = ['', '', '', '']
   filterValue: string = "";
   
   @ViewChild('paginator2', {static: false}) paginator!: MatPaginator;

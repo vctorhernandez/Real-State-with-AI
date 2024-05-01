@@ -5,12 +5,14 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../app-material.module';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
   declarations: [
     PagesComponent,
     NavbarComponent,
+    FooterComponent,
   ],
   imports: [
     CommonModule,

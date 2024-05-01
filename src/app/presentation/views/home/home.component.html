@@ -1,4 +1,39 @@
 <div class="home">
-  <h1>Real State with AI</h1>
-  <a href="#" class="button">Get Started</a>
+    <h1>Real Estate with AI</h1>
+    <a href="#" class="button">Get Started</a>
+</div>
+<div class="container mt-4">
+    <div class="section">
+        <div class="row d-flex">
+            <div class="col image-column">
+                <img src="./../../../../assets/img/bar-chart-example.svg" alt="Image 1" width="600px">
+            </div>
+            <div class="col text-center">
+                <h2 class="mt-4">Statistics</h2>
+                <p class="mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tempus lorem ac neque
+                    euismod, sit amet sodales tortor varius. Morbi at elementum est. Nulla facilisi. Nunc mollis maximus
+                    ornare. Duis nulla ligula, commodo a nunc et, vulputate vulputate quam. Phasellus dignissim, dolor
+                    non lacinia vulputate, est enim hendrerit sem, vel tempor metus ligula id ex. Sed pretium augue
+                    arcu, sed elementum mauris varius ut. Pellentesque quis tempus metus, vitae scelerisque nunc.</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="section mt-4">
+        <div class="col">
+            <h2 class="text-center">OFICINAS DESTACADAS</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-3 mb-4" *ngFor="let item of items">
+                <div class="card">
+                    <img src="./../../../../assets/img/card.jpg" class="card-img-top" alt="Office 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Office 1 Title</h5>
+                        <p class="card-price">$500 / month</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

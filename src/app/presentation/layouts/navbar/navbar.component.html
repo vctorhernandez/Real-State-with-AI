@@ -1,15 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
   <a class="navbar-brand" routerLink="/">
     <div class="navbar-brand d-flex align-items-center mx-auto">
-      <img src='assets/img/home.jpg' height="60px" alt="Idneo Capex">
+      <img src='assets/img/home-logo.jpg' height="60px" alt="Real Estate">
     </div>
   </a>
-  <div class="d-flex align-items-center">
-    <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse"
-      data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  </div>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto d-flex align-items-center">
       <li class="nav-item" routerLinkActive="active" *ngIf="isApprover">
@@ -36,7 +30,7 @@
       </mat-menu>
       <li class="nav-item" routerLinkActive="active">
         <button (click)="logout()" #tooltip="matTooltip" matTooltip="Logout" mat-icon-button class="whitebutton">
-          <mat-icon class="text-white">logout</mat-icon>
+          <mat-icon>logout</mat-icon>
         </button>
       </li>
     </ul>
