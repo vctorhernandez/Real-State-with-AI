@@ -1,0 +1,7 @@
+<form class="d-flex align-items-center">
+  <input class="form-control" type="text" [(ngModel)]="filterValue" (ngModelChange)="filter()" name="searchTerm"
+    placeholder="Search... (By: Applicant, Project Code or Visitor Company Name)" />
+  <button mat-button matTooltip="Clear filter" matTooltipPosition="right" (click)="clearFilter()">
+    <mat-icon>clear</mat-icon>
+  </button>
+</form>

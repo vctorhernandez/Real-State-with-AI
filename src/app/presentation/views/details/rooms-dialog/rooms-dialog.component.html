@@ -1,0 +1,123 @@
+<div class="banner d-flex justify-content-between align-items-center create-dialog">
+    <div class="banner-text">Add Rooms</div>
+    <button class="close-btn" (click)="closeDialog()"><mat-icon>close</mat-icon></button>
+</div>
+<div class="p-4 d-flex">
+    <div class="content-wrapper d-flex flex-column border border-gray ml-3">
+        <form [formGroup]="roomBookingForm">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker4" formControlName="date" placeholder="Date" [min]="data.startDate"
+                    [max]="data.finishDate">
+                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                <mat-datepicker #picker4></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Time</mat-label>
+                <mat-select formControlName="time" required>
+                    <mat-option value="08:00">08:00</mat-option>
+                    <mat-option value="08:15">08:15</mat-option>
+                    <mat-option value="08:30">08:30</mat-option>
+                    <mat-option value="08:45">08:45</mat-option>
+                    <mat-option value="09:00">09:00</mat-option>
+                    <mat-option value="09:15">09:15</mat-option>
+                    <mat-option value="09:30">09:30</mat-option>
+                    <mat-option value="09:45">09:45</mat-option>
+                    <mat-option value="10:00">10:00</mat-option>
+                    <mat-option value="10:15">10:15</mat-option>
+                    <mat-option value="10:30">10:30</mat-option>
+                    <mat-option value="10:45">10:45</mat-option>
+                    <mat-option value="11:00">11:00</mat-option>
+                    <mat-option value="11:15">11:15</mat-option>
+                    <mat-option value="11:30">11:30</mat-option>
+                    <mat-option value="11:45">11:45</mat-option>
+                    <mat-option value="12:00">12:00</mat-option>
+                    <mat-option value="12:15">12:15</mat-option>
+                    <mat-option value="12:30">12:30</mat-option>
+                    <mat-option value="12:45">12:45</mat-option>
+                    <mat-option value="13:00">13:00</mat-option>
+                    <mat-option value="13:15">13:15</mat-option>
+                    <mat-option value="13:30">13:30</mat-option>
+                    <mat-option value="13:45">13:45</mat-option>
+                    <mat-option value="14:00">14:00</mat-option>
+                    <mat-option value="14:15">14:15</mat-option>
+                    <mat-option value="14:30">14:30</mat-option>
+                    <mat-option value="14:45">14:45</mat-option>
+                    <mat-option value="15:00">15:00</mat-option>
+                    <mat-option value="15:15">15:15</mat-option>
+                    <mat-option value="15:30">15:30</mat-option>
+                    <mat-option value="15:45">15:45</mat-option>
+                    <mat-option value="16:00">16:00</mat-option>
+                    <mat-option value="16:15">16:15</mat-option>
+                    <mat-option value="16:30">16:30</mat-option>
+                    <mat-option value="16:45">16:45</mat-option>
+                    <mat-option value="17:00">17:00</mat-option>
+                    <mat-option value="17:15">17:15</mat-option>
+                    <mat-option value="17:30">17:30</mat-option>
+                    <mat-option value="17:45">17:45</mat-option>
+                    <mat-option value="18:00">18:00</mat-option>
+                    <mat-option value="18:15">18:15</mat-option>
+                    <mat-option value="18:30">18:30</mat-option>
+                    <mat-option value="18:45">18:45</mat-option>
+                    <mat-option value="19:00">19:00</mat-option>
+                    <mat-option value="19:15">19:15</mat-option>
+                    <mat-option value="19:30">19:30</mat-option>
+                    <mat-option value="19:45">19:45</mat-option>
+                    <mat-option value="20:00">20:00</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Room</mat-label>
+                <mat-select formControlName="roomName" required>
+                    <mat-option *ngFor="let room of rooms;" value="{{room.name}}">{{room.name}}</mat-option>
+                </mat-select>
+                <mat-error>Room is required</mat-error>
+            </mat-form-field>
+        </form>
+        <div class="d-flex justify-content-end">
+            <button class="ml-2 custom-add-button add-button" mat-flat-button (click)="createRoomBooking();">
+                Add Room
+            </button>
+        </div>
+    </div>
+    <div class="content-wrapper table-wrapper border border-gray ml-3 overflow-control-assets" style="flex: 2;">
+        <table mat-table [dataSource]="roomRequests">
+            <div>
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+                    <td mat-cell *matCellDef="let element" class="text-center"> {{element.date | date:'dd/MM/yyyy'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="time">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">Time</th>
+                    <td mat-cell *matCellDef="let element" class="text-center"> {{ element.time }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="roomName">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">Room</th>
+                    <td mat-cell *matCellDef="let element" class="text-center">{{ element.roomName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Actions">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button color="primary" aria-label="Duplicate Request"
+                            (click)='removeRoomBooking(element)' matTooltip='Discard file'>
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </div>
+        </table>
+        <div class="text-center mt-4" *ngIf="roomRequests.length == 0">
+            No room added yet.
+        </div>
+    </div>
+</div>
+<div class="stepper-button-container mb-2">
+    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-button class="create-btn pl-2 pr-2 mr-2" (click)="onSubmit()">Confirm Rooms <mat-icon>check</mat-icon></button>
+</div>

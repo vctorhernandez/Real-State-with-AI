@@ -1,0 +1,23 @@
+<div class="banner">
+  <mat-icon class="mr-2">list</mat-icon>
+  <div class="banner-text">All Requests</div>
+</div>
+<div class="filter-create mt-4">
+  <app-request-filter [dataSource]="dataSource" (filterChanged)="applyFilter($event)"></app-request-filter>
+  <!-- <div class="add-button-container">
+    <button mat-raised-button class="generate-report-button" (click)="generateReport()">Generate Request</button>
+  </div> -->
+</div>
+<div class="main-section mb-4">
+  <div class="table-container">
+    <div class="mat-elevation-z8 mt-5">
+      <app-request-table [dataSource]="dataSource" *ngIf="!loading"></app-request-table>
+      <div class="spinner-container" *ngIf="loading">
+        <div class="contenedor">
+          <img src="../../../assets/img/idneo-logo-solo.png" alt="Pelota" class="spinner">
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-paginator #paginator3 [pageSizeOptions]="[5,10,20]" [hidden]="loading" showFirstLastButtons></mat-paginator>
+</div>

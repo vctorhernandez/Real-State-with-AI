@@ -1,0 +1,361 @@
+<div *ngIf="!loading">
+  <div class="banner main-section">
+    <mat-icon class="mr-2">assignment</mat-icon>
+    <div class="banner-text">Request {{ request.id }}{{ (request.status == REJECTED) ? ' | REJECTED' : ''}}</div>
+  </div>
+  <div class="main-section mb-3" *ngIf="request.status <= FULLYAPPROVED">
+    <div class="steps">
+      <div *ngFor="let approver of limitedApprovers; let i = index">
+        <div class="step">
+          <span class="circle" [class.active]="request.status >= i"
+            [class.green-circle]="(request.status > i && i != limitedApprovers.length - 1) || request.status == 10"
+            title="{{ approver }}">
+            <ng-container
+              *ngIf="(request.status > i  && i != limitedApprovers.length - 1) || request.status == 10; else showNumber">
+              <mat-icon>check</mat-icon>
+            </ng-container>
+            <ng-template #showNumber>{{ i + 1 }}</ng-template>
+          </span>
+          <span class="step-label">{{ approver }}</span>
+        </div>
+      </div>
+      <div class="progress-bar">
+        <span class="indicator" style.width="{{(request.status) * 100}}%"></span>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="requestForm">
+    <div class="main-section mb-3" style="background-color: #fafafa;">
+      <div>
+        <div class="d-flex justify-content-between">
+          <h4 class="ml-2">Project Data</h4>
+          <div class="request-action" *ngIf="!isEditMode && ICanApprove">
+            <button mat-icon-button title="Edit" class="mr-2 btn-edit"
+            (click)="onEditButtonClick()"><mat-icon>edit</mat-icon></button>
+
+          </div>          
+          <div class="request-action" *ngIf="isEditMode && request.status <= FULLYAPPROVED">
+            <button mat-icon-button title="Cancel" class="mr-2 btn-reject"
+              (click)="onEditButtonClick()"><mat-icon>close</mat-icon></button>
+            <button mat-icon-button title="Update" class="mr-2 btn-edit"
+              (click)="onUpdateButtonClick()"><mat-icon>check</mat-icon></button>
+          </div>
+        </div>
+        <div class="row mx-auto mt-2">
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Applicant</mat-label>
+              <input matInput placeholder="applicant" formControlName="applicant" [disabled]="true" required />
+              <mat-error *ngIf="requestForm.get('applicant')?.hasError('required')">Applicant is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Business Unit</mat-label>
+              <mat-select formControlName="buId" required>
+                <mat-option *ngFor="let bu of bus;" [value]="bu.id">{{bu.name}}</mat-option>
+              </mat-select>
+              <mat-error>Business Unit is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Project Code</mat-label>
+              <mat-select formControlName="projectCode" required>
+                <mat-option *ngFor="let project of projects;" [value]="project.code">{{project.code}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="requestForm.get('projectCode')?.hasError('required')">Project Code is
+                required</mat-error>
+              <mat-error *ngIf="requestForm.get('projectCode')?.hasError('maxlength')">Project Code max length is 10
+                characters</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <h4 class="ml-2">Visitor Data</h4>
+        <div class="row mx-auto mt-2">
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="picker1" [(ngModel)]="startDate" formControlName="startDate"
+                placeholder="Start Date">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Finish Date</mat-label>
+              <input matInput [matDatepicker]="picker2" [(ngModel)]="finishDate" [min]="startDate"
+                [max]="startDate ? addDays(startDate, 14) : null" formControlName="finishDate" placeholder="End Date">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mx-auto mt-2">
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Visitor Company Name</mat-label>
+              <input matInput placeholder="visitorCompanyName" formControlName="visitorCompanyName" required
+                [maxlength]="255" />
+              <mat-error *ngIf="requestForm.get('visitorCompanyName')?.hasError('required')">Visitor Company Name is
+                required</mat-error>
+              <mat-error *ngIf="requestForm.get('visitorCompanyName')?.hasError('maxlength')">Visitor Company Name max
+                length is 255
+                characters</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Visitor Type</mat-label>
+              <mat-select formControlName="visitorType" required>
+                <mat-option *ngFor="let visit of visits;" [value]="visit.id">{{visit.name}}</mat-option>
+              </mat-select>
+              <mat-error>Visitor Type is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Coordinator</mat-label>
+              <input matInput placeholder="coordinator" formControlName="coordinator" required [maxlength]="255" />
+              <mat-error *ngIf="requestForm.get('coordinator')?.hasError('required')">Coordinator is
+                required</mat-error>
+              <mat-error *ngIf="requestForm.get('coordinator')?.hasError('email')">Please introduce a valid email
+                format</mat-error>
+              <mat-error *ngIf="requestForm.get('coordinator')?.hasError('maxlength')">Coordinator max length is 255
+                characters</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mx-auto mt-2">
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>External People Nº</mat-label>
+              <input matInput type="number" placeholder="externalPeopleNum" formControlName="externalPeopleNum" required
+                [max]="100" />
+              <mat-error *ngIf="requestForm.get('externalPeopleNum')?.hasError('required')">External People Number is
+                required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Internal People Nº</mat-label>
+              <input matInput type="number" placeholder="internalPeopleNum" formControlName="internalPeopleNum" required
+                [max]="100" />
+              <mat-error *ngIf="requestForm.get('internalPeopleNum')?.hasError('required')">Internal People Number is
+                required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Welcome with logo</mat-label>
+              <mat-select formControlName="welcomeWithLogo" required>
+                <mat-option [value]="1">YES</mat-option>
+                <mat-option [value]="0">NO</mat-option>
+              </mat-select>
+              <mat-error>Welcome with logo is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Invitation Letter</mat-label>
+              <mat-select formControlName="invitationLetter" required>
+                <mat-option [value]="1">YES</mat-option>
+                <mat-option [value]="0">NO</mat-option>
+              </mat-select>
+              <mat-error>Invitation Letter is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <h4 class="ml-2">Tour Data</h4>
+        <div class="row mx-auto mt-2">
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Tour Needed</mat-label>
+              <mat-select formControlName="tourNeeded" required>
+                <mat-option [value]="1">YES</mat-option>
+                <mat-option [value]="0">NO</mat-option>
+              </mat-select>
+              <mat-error *ngIf="requestForm.get('tourNeeded')?.hasError('required')">Tour Needed is required</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline" *ngIf="requestForm.get('tourNeeded')?.value == 1">
+              <mat-label>Tour Responsible Name</mat-label>
+              <input matInput placeholder="tourResponsibleName" formControlName="tourResponsibleName" required
+                [maxlength]="55" />
+              <mat-error *ngIf="requestForm.get('tourResponsibleName')?.hasError('required')">Tour Responsible Name is
+                required</mat-error>
+              <mat-error *ngIf="requestForm.get('tourResponsibleName')?.hasError('maxlength')">Tour Responsible Name max
+                length is 255 characters</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field appearance="outline" *ngIf="requestForm.get('tourNeeded')?.value == 1">
+              <mat-label>Tour Responsible Phone</mat-label>
+              <input matInput placeholder="tourResponsiblePhone" formControlName="tourResponsiblePhone" required
+                [maxlength]="55" />
+              <mat-error *ngIf="requestForm.get('tourResponsiblePhone')?.hasError('required')">Tour Responsible Phone
+                is required</mat-error>
+              <mat-error *ngIf="requestForm.get('tourResponsiblePhone')?.hasError('maxlength')">Tour Responsible Phone
+                max length is 20 characters</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mx-auto mt-2 cont-main" *ngIf="requestForm.get('tourNeeded')?.value == 1"  [class.disable-click]="!isEditMode">
+          <div class="cont-checkbox" *ngFor="let zone of zones">
+            <input type="checkbox" [id]="zone.id" (change)="selected_chart($event.srcElement, zone.id)" 
+            [checked]="isZoneChecked(zone.id)"/>
+            <label [for]="zone.id">
+              <img src="../../../../../assets/img/zones/zone-{{zone.id}}.png"/>
+              <span class="cover-checkbox">
+                <svg viewBox="0 0 12 10">
+                  <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                </svg>
+              </span>
+              <div class="info">{{ zone.name }}</div>
+            </label>
+          </div>
+        </div>
+        <h4 class="mt-4 ml-2" *ngIf="roomRequests.length > 0">Booked Rooms</h4>
+        <div class="mb-4" *ngIf="roomRequests.length > 0">
+          <div class="d-flex mx-auto">
+            <div class="mat-elevation-z8 content-wrapper table-wrapper">
+              <table mat-table [dataSource]="roomRequests">
+                <div class="pr-10">
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.date | date: 'dd/MM/yyyy'}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="time">
+                    <th mat-header-cell *matHeaderCellDef>Time</th>
+                    <td mat-cell *matCellDef="let element">{{ element.time }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="room">
+                    <th mat-header-cell *matHeaderCellDef>Room</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.roomName }}</td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </div>
+              </table>
+              <div class="no-table-content" *ngIf="roomRequests.length === 0">
+                No asset added.
+              </div>
+            </div>
+          </div>
+        </div>
+        <h4 class="ml-2" *ngIf="breakfastRequests.length > 0 || lunchRequests.length > 0">Menu Bookings</h4>
+        <div class="row mx-auto mt-2" *ngIf="breakfastRequests.length > 0 || lunchRequests.length > 0">
+          <div class="card ml-4 rounded-bottom" style="width: 25%" *ngFor="let element of breakfastRequests">
+            <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+              <img src="../../../../assets/img/menus/breakfast.jpg"
+                class="img-fluid" />
+              <a href="#!">
+                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+              </a>
+            </div>
+            <div>
+              <div class="d-flex justify-content-between date-time">
+                <p class="ml-2 time-margin">{{ element.date | date: 'dd/MM/yyyy'}}</p>
+                <div class="d-flex">
+                  <p class="mr-1 time-margin">{{ element.time }}</p>
+                  <mat-icon class="mr-2">access_time</mat-icon>
+                </div>
+              </div>
+              <div class="card-body">
+                <p class="card-text font-weight-bold">{{element.name}}</p>
+                <div class="d-flex">
+                  <mat-icon>person</mat-icon>
+                  <p class="mt-1 peopleNum"> x {{ element.peopleNum }}</p>
+                </div>
+                <p class="card-text">{{ element.comments }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="card ml-4 rounded-bottom" style="width: 25%" *ngFor="let element of lunchRequests">
+            <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+              <img src="../../../../assets/img/menus/lunch.jpg" class="img-fluid" />
+              <a href="#!">
+                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+              </a>
+            </div>
+            <div>
+              <div class="d-flex justify-content-between date-time">
+                <p class="ml-2 time-margin">{{ element.date | date: 'dd/MM/yyyy'}}</p>
+                <div class="d-flex">
+                  <p class="mr-1 time-margin">{{ element.time }}</p>
+                  <mat-icon class="mr-2">access_time</mat-icon>
+                </div>
+              </div>
+              <div class="card-body">
+                <p class="card-text font-weight-bold">{{element.name}}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    <mat-icon>person</mat-icon>
+                    <p class="mt-3 peopleNum"> x {{ element.peopleNum }} </p>
+                  </div>
+                  <mat-icon *ngIf="element.coffee" class="ml-4">coffee</mat-icon>
+                </div>
+                <p class="card-text">{{ element.comments }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h4 class="mt-4 ml-2" *ngIf="taxiRequests.length > 0">Taxi Bookings</h4>
+        <div class="row mx-auto mt-2" *ngIf="taxiRequests.length > 0">
+          <div class="card ml-4 rounded-bottom" style="width: 25%" *ngFor="let element of taxiRequests">
+            <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+              <img src="../../../../assets/img/taxis/taxi.jpg"
+                class="img-fluid" />
+              <a href="#!">
+                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+              </a>
+            </div>
+            <div>
+              <div class="d-flex justify-content-between date-time">
+                <p class="ml-2 time-margin">{{ element.date | date: 'dd/MM/yyyy'}}</p>
+                <div class="d-flex">
+                  <p class="mr-1 time-margin">{{ element.time }}</p>
+                  <mat-icon class="mr-2">access_time</mat-icon>
+                </div>
+              </div>
+              <div class="card-body">
+                <p class="card-text"><b>Origin: </b>{{element.origin}}</p>
+                <p class="card-text"><b>Destination: </b>{{element.destination}}</p>
+                <div class="d-flex">
+                  <mat-icon>person</mat-icon>
+                  <p class="mt-1 peopleNum"> x {{ element.peopleNum }}</p>
+                </div>
+                <p class="card-text">{{ element.comments }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h4 class="mt-4 ml-2">Other Needs or Comments</h4>
+        <div class="row mx-auto mt-2">
+          <div class="col">
+            <mat-form-field appearance="outline">
+              <mat-label>Comments</mat-label>
+              <textarea matInput formControlName="comments"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="request-confirmation" *ngIf="!isEditMode && ICanApprove">
+    <button *ngIf="request.status < FULLYAPPROVED" class="btn btn-reject" (click)="onRejectRequest()">Reject</button>
+    <button *ngIf="request.status < FULLYAPPROVED" class="btn btn-accept ml-2"
+      (click)="onAcceptRequest()">Accept</button>
+  </div>
+</div>
+
+<div class="spinner-container" *ngIf="loading">
+  <div class="contenedor">
+    <img src="../../../assets/img/idneo-logo-solo.png" alt="Pelota" class="spinner">
+  </div>
+</div>

@@ -1,0 +1,51 @@
+.main-section {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+mat-tab-group {
+    min-height: 700px;
+    margin: 80px;
+    margin-top: 0px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+mat-tab-label {
+    color: #666;
+    font-size: 14px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+}
+
+.mat-tab-label-active {
+    background-color: var(--primary-color);
+    color: #fff;
+    font-weight: 600;
+}
+
+mat-tab-label:hover {
+    background-color: rgba(85, 106, 221, 0.2);
+}
+
+.mat-tab-label-active {
+    box-shadow: 0 2px 6px rgba(85, 106, 221, 0.2);
+}
+
+.mat-tab-body {
+    padding: 20px;
+    background-color: #f8f8f8;
+}
+
+/* Estilo para el mat-tab activo */
+.mat-tab-group .mat-tab-label.mat-tab-label-active {
+    border-bottom: 2px solid var(--primary-color)!important;
+}
+
+/* Estilo para los mat-tabs inactivos (quita el borde inferior del último mat-tab) */
+.mat-tab-group .mat-tab-label:not(:last-child) {
+    border-bottom: none;
+}

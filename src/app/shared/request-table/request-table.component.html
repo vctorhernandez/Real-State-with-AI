@@ -1,0 +1,35 @@
+<div class="mat-elevation-z8 mt-5" [hidden]="loading">
+    <table mat-table [dataSource]="dataSource" matSort matSortDirection="desc">
+        <ng-container matColumnDef="creationDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >Creation Date</th>
+            <td mat-cell *matCellDef="let row">{{ row.creationDate | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="applicant">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >Applicant</th>
+            <td mat-cell *matCellDef="let row">{{ row.applicant }}</td>
+        </ng-container>
+        <ng-container matColumnDef="projectCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >Project Code</th>
+            <td mat-cell *matCellDef="let row">{{ row.projectCode }}</td>
+        </ng-container>
+        <ng-container matColumnDef="buId">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header >Business Unit</th>
+            <td mat-cell *matCellDef="let row">{{ getBusinessUnitName(row.buId) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="visitorCompanyName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Visitor Company Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.visitorCompanyName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let row">
+                <img src="../../../../assets/img/{{row.status + 1}}.png" width="25px" class="ml-2"/>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row" (click)="goToDetails(row)"></tr>
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell no-data pl-3" colspan="99999">No requests</td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,593 @@
+<div class="banner d-flex justify-content-between align-items-center create-dialog">
+    <div class="banner-text">Create Request</div>
+    <button class="close-btn" (click)="closeDialog()"><mat-icon>close</mat-icon></button>
+</div>
+<mat-stepper linear #stepper class="create-dialog">
+    <mat-step state="project-details">
+        <ng-template matStepLabel>Project Data</ng-template>
+        <form [formGroup]="step1Form" class="ml-4">
+            <div class="row mt-3">
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Business Unit</mat-label>
+                        <mat-select formControlName="buId" required>
+                            <mat-option *ngFor="let bu of businessUnits;" [value]="bu.id">{{bu.name}}</mat-option>
+                        </mat-select>
+                        <mat-error>Business Unit is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Project Code</mat-label>
+                        <mat-select formControlName="projectCode" required>
+                            <mat-option *ngFor="let project of projects;" [value]="project.code">{{project.code}}</mat-option>
+                          </mat-select>
+                        <mat-icon matSuffix>edit</mat-icon>
+                        <mat-error *ngIf="step1Form.get('projectCode')?.hasError('required')">Project Code is
+                            required</mat-error>
+                        <mat-error *ngIf="step1Form.get('projectCode')?.hasError('maxlength')">Project Code cannot
+                            exceed 10 characters</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="stepper-button-container">
+                <button mat-button type="button" matStepperNext [disabled]="!this.step1Form.valid">Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step state="visitor-data">
+        <ng-template matStepLabel>Visitor Data</ng-template>
+        <form [formGroup]="step2Form" class="ml-4">
+            <div class="row mt-3">
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Visitor Type</mat-label>
+                        <mat-select formControlName="visitorType" required>
+                            <mat-option *ngFor="let visit of visits;" [value]="visit.id">{{visit.name}}</mat-option>
+                        </mat-select>
+                        <mat-error>Visitor Type is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Visitor Company Name</mat-label>
+                        <input matInput formControlName="visitorCompanyName">
+                        <mat-icon matSuffix>edit</mat-icon>
+                        <mat-error *ngIf="step2Form.get('visitorCompanyName')?.hasError('required')">Visitor Company
+                            Visitor Company Name is
+                            required</mat-error>
+                        <mat-error *ngIf="step2Form.get('visitorCompanyName')?.hasError('maxlength')">Visitor Company
+                            Visitor Company Name cannot
+                            exceed 10 characters</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Coordinator Email</mat-label>
+                        <input matInput placeholder="example@email.com" formControlName="coordinator" type="email">
+                        <mat-icon matSuffix>edit</mat-icon>
+                        <mat-error>Please introduce a valid email address</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Number of external people</mat-label>
+                        <input matInput formControlName="externalPeopleNum" type="number">
+                        <mat-icon matSuffix>edit</mat-icon>
+                        <mat-error>Number of external people is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Number of internal people</mat-label>
+                        <input matInput formControlName="internalPeopleNum" type="number">
+                        <mat-icon matSuffix>edit</mat-icon>
+                        <mat-error>Number of internal people is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Welcome with Logo</mat-label>
+                        <mat-select formControlName="welcomeWithLogo" required>
+                            <mat-option value="1">YES</mat-option>
+                            <mat-option value="0">NO</mat-option>
+                        </mat-select>
+                        <mat-error>Welcome with Logo is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Invitation Letter</mat-label>
+                        <mat-select formControlName="invitationLetter" required>
+                            <mat-option value="1">YES</mat-option>
+                            <mat-option value="0">NO</mat-option>
+                        </mat-select>
+                        <mat-error>Invitation Letter is required</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="stepper-button-container">
+                <button mat-button type="button" matStepperPrevious>Back</button>
+                <button mat-button type="button" matStepperNext [disabled]="!this.step2Form.valid">Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step state="dates">
+        <ng-template matStepLabel>Dates</ng-template>
+        <form [formGroup]="step3Form" class="ml-4">
+            <div class="row mt-3">
+                <div class="col">
+                    <mat-form-field appearance="outline" class="mt-4">
+                        <input matInput [matDatepicker]="picker1" [(ngModel)]="startDate" formControlName="startDate"
+                            placeholder="Start Date">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                        <mat-error>Start Date is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline" class="mt-4">
+                        <input matInput [matDatepicker]="picker2" [(ngModel)]="finishDate" [min]="startDate"
+                            [max]="startDate ? addDays(startDate, 14) : null" formControlName="finishDate"
+                            placeholder="End Date">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                        <mat-error>End Date is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline" class="mt-4">
+                        <mat-label>Tour Needed?</mat-label>
+                        <mat-select formControlName="tourNeeded" required [(ngModel)]="tourNeeded">
+                            <mat-option [value]="1">YES</mat-option>
+                            <mat-option [value]="0">NO</mat-option>
+                        </mat-select>
+                        <mat-error>Tour Needed is required</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="tourNeeded == 1">
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tour Responsible Name</mat-label>
+                        <input matInput formControlName="tourResponsibleName" type="text">
+                        <mat-icon matSuffix>edit</mat-icon>
+                        <mat-error>Tour Responsible Name is required</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tour Responsible Phone</mat-label>
+                        <input matInput placeholder="+34123456789" formControlName="tourResponsiblePhone" type="text">
+                        <mat-icon matSuffix>edit</mat-icon>
+                        <mat-error>Tour Responsible Phone is required</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row mt-3 cont-main" *ngIf="tourNeeded == 1">
+                <div class="cont-checkbox" *ngFor="let zone of zones; index as i">
+                    <input type="checkbox" [id]="'myCheckbox-' + i" (change)="selected_chart($event.srcElement, zone.id)" />
+                    <label [for]="'myCheckbox-' + i">
+                      <img src="../../../../../assets/img/zones/zone-{{zone.id}}.png" />
+                      <span class="cover-checkbox">
+                        <svg viewBox="0 0 12 10">
+                          <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                        </svg>
+                      </span>
+                      <div class="info">{{ zone.name }}</div>
+                    </label>
+                  </div>
+            </div>
+            <div class="stepper-button-container">
+                <button mat-button type="button" matStepperPrevious>Back</button>
+                <button mat-button type="button" matStepperNext [disabled]="!this.step3Form.valid || (this.tourNeeded === 1 && zoneRequests.length === 0)">Next</button>
+            </div>
+        </form>
+    </mat-step>
+    <mat-step state="breakfast">
+        <ng-template matStepLabel>Breakfast</ng-template>
+        <div class="p-4 d-flex">
+            <div class="content-wrapper d-flex flex-column border border-gray ml-3">
+                <form [formGroup]="breakfastForm">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Breakfast Day</mat-label>
+                        <input matInput [matDatepicker]="picker4" formControlName="date" placeholder="Date"
+                            [min]="startDate" [max]="finishDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                        <mat-datepicker #picker4></mat-datepicker>
+                        <mat-error>Breakfast Day is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Breakfast Time</mat-label>
+                        <mat-select formControlName="time" required>
+                            <mat-option value="08:00">08:00</mat-option>
+                            <mat-option value="08:15">08:15</mat-option>
+                            <mat-option value="08:30">08:30</mat-option>
+                            <mat-option value="08:45">08:45</mat-option>
+                            <mat-option value="09:00">09:00</mat-option>
+                            <mat-option value="09:15">09:15</mat-option>
+                            <mat-option value="09:30">09:30</mat-option>
+                            <mat-option value="09:45">09:45</mat-option>
+                            <mat-option value="10:00">10:00</mat-option>
+                        </mat-select>
+                        <mat-error>Breakfast Time is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Menu Type</mat-label>
+                        <mat-select formControlName="name" required>
+                            <mat-option *ngFor="let menu of breakfastMenus;"
+                                value="{{menu.name}}">{{menu.name}}</mat-option>
+                        </mat-select>
+                        <mat-error>Menu Type is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Number of people</mat-label>
+                        <input matInput formControlName="peopleNum" placeholder="4"/>
+                        <mat-error>Enter a valid amount</mat-error>
+                    </mat-form-field>
+                </form>
+                <div class="d-flex justify-content-end">
+                    <button class="ml-2 custom-add-button add-button" mat-flat-button (click)="createBreakfastMenu();">
+                        Add Menu
+                    </button>
+                </div>
+            </div>
+            <div class="content-wrapper table-wrapper border border-gray ml-3 overflow-control-assets" style="flex: 2;">
+                <table mat-table [dataSource]="breakfastRequests">
+                    <div>
+                        <ng-container matColumnDef="breakfastDate">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.date |
+                                date:'dd/MM/yyyy'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="breakfastTime">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Time</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.time }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="breakfastMenuType">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Menu Type</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.name}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="breakfastPeopleNumber">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">People Number</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.peopleNum}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Actions">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" aria-label="Duplicate Request"
+                                    (click)='removeBreakfast(element)' matTooltip='Discard file'>
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                    </div>
+                </table>
+                <div class="text-center mt-4" *ngIf="breakfastRequests.length == 0">
+                    No breakfast added yet.
+                </div>
+            </div>
+        </div>
+        <div class="stepper-button-container">
+            <button mat-button type="button" matStepperPrevious>Back</button>
+            <button mat-button type="button" matStepperNext>Next</button>
+        </div>
+    </mat-step>
+    <mat-step state="lunch">
+        <ng-template matStepLabel>Lunch</ng-template>
+        <div class="p-4 d-flex">
+            <div class="content-wrapper d-flex flex-column border border-gray ml-3">
+                <form [formGroup]="lunchForm">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Lunch Day</mat-label>
+                        <input matInput [matDatepicker]="picker5" formControlName="date" placeholder="Date"
+                            [min]="startDate" [max]="finishDate">
+                        <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                        <mat-datepicker #picker5></mat-datepicker>
+                        <mat-error>Lunch Day is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Lunch Time</mat-label>
+                        <mat-select formControlName="time" required>
+                            <mat-option value="12:00">12:00</mat-option>
+                            <mat-option value="12:15">12:15</mat-option>
+                            <mat-option value="12:30">12:30</mat-option>
+                            <mat-option value="12:45">12:45</mat-option>
+                            <mat-option value="13:00">13:00</mat-option>
+                            <mat-option value="13:15">13:15</mat-option>
+                            <mat-option value="13:30">13:30</mat-option>
+                            <mat-option value="13:45">13:45</mat-option>
+                            <mat-option value="14:00">14:00</mat-option>
+                            <mat-option value="14:15">14:15</mat-option>
+                            <mat-option value="14:30">14:30</mat-option>
+                            <mat-option value="14:45">14:45</mat-option>
+                            <mat-option value="15:00">15:00</mat-option>
+                            <mat-option value="15:15">15:15</mat-option>
+                            <mat-option value="15:30">15:30</mat-option>
+                            <mat-option value="15:45">15:45</mat-option>
+                        </mat-select>
+                        <mat-error>Lunch Time is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Menu Type</mat-label>
+                        <mat-select formControlName="name" required>
+                            <mat-option *ngFor="let menu of lunchMenus;"
+                                value="{{menu.name}}">{{menu.name}}</mat-option>
+                        </mat-select>
+                        <mat-error>Menu Type is required</mat-error>
+                    </mat-form-field>
+                    <div class="d-flex">
+                        <mat-form-field appearance="outline" class="w-100 mr-2">
+                            <mat-label>Number of people</mat-label>
+                            <input matInput formControlName="peopleNum" placeholder="4" required/>
+                            <mat-error>Enter a valid amount</mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Coffee</mat-label>
+                            <mat-select formControlName="coffee" required>
+                                <mat-option [value]="1">YES</mat-option>
+                                <mat-option [value]="0">NO</mat-option>
+                            </mat-select>
+                            <mat-error>Coffee is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </form>
+                <div class="d-flex justify-content-end">
+                    <button class="ml-2 custom-add-button add-button" mat-flat-button (click)="createLunchMenu();">
+                        Add Menu
+                    </button>
+                </div>
+            </div>
+            <div class="content-wrapper table-wrapper border border-gray ml-3 overflow-control-assets" style="flex: 2;">
+                <table mat-table [dataSource]="lunchRequests">
+                    <div>
+                        <ng-container matColumnDef="lunchDate">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.date |
+                                date:'dd/MM/yyyy'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="lunchTime">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Time</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.time }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="lunchMenuType">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Menu Type</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.name }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="lunchCoffee">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Coffee</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.coffee == 1 ? 'YES' : 'NO' }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="lunchPeopleNumber">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">People Number</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.peopleNum}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Actions">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" aria-label="Duplicate Request"
+                                    (click)='removeLunch(element)' matTooltip='Discard file'>
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+                    </div>
+                </table>
+                <div class="text-center mt-4" *ngIf="lunchRequests.length == 0">
+                    No lunch added yet.
+                </div>
+            </div>
+        </div>
+        <div class="stepper-button-container">
+            <button mat-button type="button" matStepperPrevious>Back</button>
+            <button mat-button type="button" matStepperNext>Next</button>
+        </div>
+    </mat-step>
+    <mat-step state="taxi">
+        <ng-template matStepLabel>Taxi Booking</ng-template>
+        <div class="p-4 d-flex">
+            <div class="content-wrapper d-flex flex-column border border-gray ml-3">
+                <form [formGroup]="taxiForm">
+                    <div class="d-flex">
+                        <mat-form-field appearance="outline" class="w-100 mr-2">
+                            <mat-label>Taxi Date</mat-label>
+                            <input matInput [matDatepicker]="picker6" formControlName="date" placeholder="Date"
+                                [min]="startDate" [max]="finishDate">
+                            <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                            <mat-datepicker #picker6></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Taxi Time</mat-label>
+                            <mat-select formControlName="time" required>
+                                <mat-option value="05:00">05:00</mat-option>
+                                <mat-option value="05:15">05:15</mat-option>
+                                <mat-option value="05:30">05:30</mat-option>
+                                <mat-option value="05:45">05:45</mat-option>
+                                <mat-option value="06:00">06:00</mat-option>
+                                <mat-option value="06:15">06:15</mat-option>
+                                <mat-option value="06:30">06:30</mat-option>
+                                <mat-option value="06:45">06:45</mat-option>
+                                <mat-option value="07:00">07:00</mat-option>
+                                <mat-option value="07:15">07:15</mat-option>
+                                <mat-option value="07:30">07:30</mat-option>
+                                <mat-option value="07:45">07:45</mat-option>
+                                <mat-option value="08:00">08:00</mat-option>
+                                <mat-option value="08:15">08:15</mat-option>
+                                <mat-option value="08:30">08:30</mat-option>
+                                <mat-option value="08:45">08:45</mat-option>
+                                <mat-option value="09:00">09:00</mat-option>
+                                <mat-option value="09:15">09:15</mat-option>
+                                <mat-option value="09:30">09:30</mat-option>
+                                <mat-option value="09:45">09:45</mat-option>
+                                <mat-option value="10:00">10:00</mat-option>
+                                <mat-option value="10:15">10:15</mat-option>
+                                <mat-option value="10:30">10:30</mat-option>
+                                <mat-option value="10:45">10:45</mat-option>
+                                <mat-option value="11:00">11:00</mat-option>
+                                <mat-option value="11:15">11:15</mat-option>
+                                <mat-option value="11:30">11:30</mat-option>
+                                <mat-option value="11:45">11:45</mat-option>
+                                <mat-option value="12:00">12:00</mat-option>
+                                <mat-option value="12:15">12:15</mat-option>
+                                <mat-option value="12:30">12:30</mat-option>
+                                <mat-option value="12:45">12:45</mat-option>
+                                <mat-option value="13:00">13:00</mat-option>
+                                <mat-option value="13:15">13:15</mat-option>
+                                <mat-option value="13:30">13:30</mat-option>
+                                <mat-option value="13:45">13:45</mat-option>
+                                <mat-option value="14:00">14:00</mat-option>
+                                <mat-option value="14:15">14:15</mat-option>
+                                <mat-option value="14:30">14:30</mat-option>
+                                <mat-option value="14:45">14:45</mat-option>
+                                <mat-option value="15:00">15:00</mat-option>
+                                <mat-option value="15:15">15:15</mat-option>
+                                <mat-option value="15:30">15:30</mat-option>
+                                <mat-option value="15:45">15:45</mat-option>
+                                <mat-option value="16:00">16:00</mat-option>
+                                <mat-option value="16:15">16:15</mat-option>
+                                <mat-option value="16:30">16:30</mat-option>
+                                <mat-option value="16:45">16:45</mat-option>
+                                <mat-option value="17:00">17:00</mat-option>
+                                <mat-option value="17:15">17:15</mat-option>
+                                <mat-option value="17:30">17:30</mat-option>
+                                <mat-option value="17:45">17:45</mat-option>
+                                <mat-option value="18:00">18:00</mat-option>
+                                <mat-option value="18:15">18:15</mat-option>
+                                <mat-option value="18:30">18:30</mat-option>
+                                <mat-option value="18:45">18:45</mat-option>
+                                <mat-option value="19:00">19:00</mat-option>
+                                <mat-option value="19:15">19:15</mat-option>
+                                <mat-option value="19:30">19:30</mat-option>
+                                <mat-option value="19:45">19:45</mat-option>
+                                <mat-option value="20:00">20:00</mat-option>
+                                <mat-option value="20:15">20:15</mat-option>
+                                <mat-option value="20:30">20:30</mat-option>
+                                <mat-option value="20:45">20:45</mat-option>
+                            </mat-select>
+                            <mat-error>Taxi Time is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Taxi Origin</mat-label>
+                        <input matInput placeholder="Carrer Rec de Dalt, 3, 08100 Mollet del Vallès, Barcelona"
+                            formControlName="origin" [maxlength]="255">
+                        <mat-error>Taxi Origin is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Taxi Destination</mat-label>
+                        <input matInput placeholder="Carrer Rec de Dalt, 3, 08100 Mollet del Vallès, Barcelona"
+                            formControlName="destination" [maxlength]="255">
+                        <mat-error>Taxi Destination is required</mat-error>
+                    </mat-form-field>
+                    <div class="d-flex">
+                        <mat-form-field appearance="outline" class="w-100 mr-2">
+                            <mat-label>Number of people</mat-label>
+                            <input matInput formControlName="peopleNum" placeholder="4" />
+                            <mat-error>
+                                Enter a valid amount.
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Taxi Who Pays?</mat-label>
+                            <mat-select formControlName="whoPays" required>
+                                <mat-option value="Visitor">Visitor</mat-option>
+                                <mat-option value="Idneo">Idneo</mat-option>
+                            </mat-select>
+                            <mat-error>Taxi Who Pays is required</mat-error>
+                        </mat-form-field>
+                    </div>
+                </form>
+                <div class="d-flex justify-content-end">
+                    <button class="ml-2 custom-add-button add-button" mat-flat-button (click)="createTaxiMenu();">
+                        Add Taxi
+                    </button>
+                </div>
+            </div>
+            <div class="content-wrapper table-wrapper border border-gray ml-3 overflow-control-assets" style="flex: 2;">
+                <table mat-table [dataSource]="taxiRequests">
+                    <div>
+                        <ng-container matColumnDef="taxiDate">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.date |
+                                date:'dd/MM/yyyy'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="taxiTime">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Time</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.time }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="taxiPeopleNumber">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">People Number</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.peopleNum}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="taxiOrigin">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Origin</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.origin }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="taxiDestination">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Destination</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.destination }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="taxiWhoPays">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">Who Pays?</th>
+                            <td mat-cell *matCellDef="let element" class="text-center"> {{element.whoPays }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Actions">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" aria-label="Duplicate Request"
+                                    (click)='removeTaxi(element)' matTooltip='Discard file'>
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
+                    </div>
+                </table>
+                <div class="text-center mt-4" *ngIf="taxiRequests.length == 0">
+                    No taxi booking added yet.
+                </div>
+            </div>
+        </div>
+        <div class="stepper-button-container">
+            <button mat-button type="button" matStepperPrevious>Back</button>
+            <button mat-button type="button" matStepperNext>Next</button>
+        </div>
+    </mat-step>
+    <mat-step state="comment">
+        <ng-template matStepLabel>Comments</ng-template>
+        <div class="p-4 d-flex">
+            <div class="content-wrapper d-flex flex-column border border-gray ml-3">
+                <mat-form-field class="w-100">
+                    <mat-label>Leave a comment</mat-label>
+                    <textarea matInput placeholder="Ex. Customer needs..." [(ngModel)]="comments"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="stepper-button-container">
+            <button mat-button matStepperPrevious>Back</button>
+            <button class="create-btn pl-2 pr-2" (click)="onSubmit()">Create<mat-icon>check</mat-icon></button>
+        </div>
+    </mat-step>
+</mat-stepper>
