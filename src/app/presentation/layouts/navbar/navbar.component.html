@@ -1,12 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
   <a class="navbar-brand" routerLink="/">
     <div class="navbar-brand d-flex align-items-center mx-auto">
-      <img src='assets/img/5b5f52e28102a141e770f5fd59a2ffc5.png' height="60px" alt="Idneo Capex">
-    </div>
-  </a>
-  <a class="navbar-brand mt-2" routerLink="/">
-    <div class="title-shadow py-1 px-2 d-flex align-items-center rounded">
-      <span class="title-text font-weight-bold text-center p-1">Customer's Experience</span>
+      <img src='assets/img/home.jpg' height="60px" alt="Idneo Capex">
     </div>
   </a>
   <div class="d-flex align-items-center">
@@ -18,14 +13,15 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto d-flex align-items-center">
       <li class="nav-item" routerLinkActive="active" *ngIf="isApprover">
-        <button mat-icon-button #tooltip="matTooltip" matTooltip="Approvals" routerLink="/approvals">
-          <mat-icon [matBadge]="badgeLength" [matBadgeHidden]="!badgeLength" matBadgeColor="warn" class="text-white" aria-hidden="false">
-            playlist_add_check</mat-icon>
+        <button mat-icon-button #tooltip="matTooltip" matTooltip="Approvals" routerLink="/approvals" class="tooltip-button">
+          <mat-icon [matBadge]="badgeLength" [matBadgeHidden]="!badgeLength" matBadgeColor="warn" aria-hidden="false">
+            playlist_add_check
+          </mat-icon>
         </button>
       </li>
       <li class="nav-item" routerLinkActive="active" *ngIf="isAdmin">
         <button #tooltip="matTooltip" matTooltip="Admin" mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon class="text-white">person</mat-icon>
+          <mat-icon>person</mat-icon>
         </button>
       </li>
       <mat-menu #menu="matMenu">
