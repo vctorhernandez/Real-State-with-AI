@@ -22,15 +22,15 @@
     <br>
     <div class="section mt-4">
         <div class="col">
-            <h2 class="text-center">OFICINAS DESTACADAS</h2>
+            <h2 class="text-center">HOT DEALS</h2>
         </div>
         <div class="row">
-            <div class="col-md-3 mb-4" *ngFor="let item of items">
+            <div class="col-md-3 mb-4" *ngFor="let property of properties">
                 <div class="card">
-                    <img src="./../../../../assets/img/card.jpg" class="card-img-top" alt="Office 2">
+                    <img [src]="property.image" class="card-img-top" [alt]="property.name">
                     <div class="card-body">
-                        <h5 class="card-title">Office 1 Title</h5>
-                        <p class="card-price">$500 / month</p>
+                        <h5 class="card-title">{{property.name}}</h5>
+                        <p class="card-price">{{property.price}}</p>
                     </div>
                 </div>
             </div>

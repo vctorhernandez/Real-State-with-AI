@@ -9,8 +9,7 @@ import { HomeComponent } from "./home/home.component";
 import localeES from '@angular/common/locales/es';
 import { SharedModule } from "../../shared/shared.module";
 import { DetailsComponent } from "./details/details.component";
-import { ApprovalsComponent } from "./approvals/approvals.component";
-import { CreateDialogComponent } from "./home/create-dialog/create-dialog.component";
+import { ComparsionComponent } from "./comparison/comparison.component";
 import { AllRequestsComponent } from "./admin/all-requests/all-requests.component";
 import { SettingsComponent } from "./admin/settings/settings.component";
 import { RoomsComponent } from "./admin/settings/rooms/rooms.component";
@@ -18,6 +17,7 @@ import { VisitsComponent } from "./admin/settings/visits/visits.component";
 import { MenusComponent } from "./admin/settings/menus/menus.component";
 import { RoomsDialogComponent } from './details/rooms-dialog/rooms-dialog.component';
 import { MAT_DATE_LOCALE } from "@angular/material/core";
+import { PropertyIdeasComponent } from './property-ideas/property-ideas.component';
 
 // Register the localization
 registerLocaleData(localeES, 'es-ES');
@@ -35,15 +35,15 @@ registerLocaleData(localeES, 'es-ES');
   exports: [RoutingModule],
   declarations: [
     HomeComponent,
-    CreateDialogComponent,
     DetailsComponent,
-    ApprovalsComponent,
+    ComparsionComponent,
     AllRequestsComponent,
     SettingsComponent,
     RoomsComponent,
     VisitsComponent,
     MenusComponent,
-    RoomsDialogComponent
+    RoomsDialogComponent,
+    PropertyIdeasComponent
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },

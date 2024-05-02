@@ -1,0 +1,58 @@
+<div class="container">
+  <h2 class="text-center mt-4">Real Estate Comparison</h2>
+
+  <div class="main-section d-flex justify-content-around align-items-start">
+    <!-- Property 1 Section -->
+    <section class="product-section mr-5">
+      <div>
+        <img src="./../../../../assets/img/test1.jpg" alt="Property 1" width="400px">
+      </div>
+      <div>
+        <h4>Property 1 Characteristics</h4>
+        <ul>
+          <li>Location: Central</li>
+          <li>Size: 1500 sqft</li>
+          <li>Price: $500,000</li>
+          <li>Amenities: Gym, Pool</li>
+        </ul>
+      </div>
+      <select [id]="'selector-1'" name="property1_id" class="text-center">
+        <option>Property 1</option>
+        <option>Property 2</option>
+        <option>Property 3</option>
+      </select>
+    </section>
+
+    <!-- Property 2 Section -->
+    <section class="product-section">
+      <div>
+        <img src="./../../../../assets/img/test2.jpg" alt="Property 2" width="400px">
+      </div>
+      <div>
+        <h4>Property 2 Characteristics</h4>
+        <ul>
+          <li>Location: Suburban</li>
+          <li>Size: 2000 sqft</li>
+          <li>Price: $450,000</li>
+          <li>Amenities: Park, Playground</li>
+        </ul>
+      </div>
+      <select [id]="'selector-2'" name="property2_id" class="text-center">
+        <option>Property 1</option>
+        <option>Property 2</option>
+        <option>Property 3</option>
+      </select>
+    </section>
+  </div>
+
+  <!-- Comparison Results Section -->
+  <div class="comparison-results text-center mt-5">
+    <h3>Comparison Results</h3>
+    <ul>
+      <li>Location: Property 1 > Property 2</li>
+      <li>Size: Property 2 > Property 1</li>
+      <li>Price: Property 1 > Property 2</li>
+      <li>Amenities: Property 2 > Property 1</li>
+    </ul>
+  </div>
+</div>

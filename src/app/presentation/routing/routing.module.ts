@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PagesComponent } from '../layouts/pages.component';
 import { HomeComponent } from '../views/home/home.component';
-import { ApprovalsComponent } from '../views/approvals/approvals.component';
+import { ComparsionComponent } from '../views/comparison/comparison.component';
 import { AllRequestsComponent } from '../views/admin/all-requests/all-requests.component';
 import { SettingsComponent } from '../views/admin/settings/settings.component';
 import { LoginComponent } from '../views/login/login.component';
 import { DetailsComponent } from '../views/details/details.component';
 import { LoginGuard } from '../../core/guards/login.guard';
+import { PropertyIdeasComponent } from '../views/property-ideas/property-ideas.component';
 
 const routes: Routes = [
   {
@@ -22,7 +23,10 @@ const routes: Routes = [
         path: 'home', component: HomeComponent
       },
       {
-        path: 'approvals', component: ApprovalsComponent
+        path: 'comparison', component: ComparsionComponent
+      },
+      {
+        path: 'property-ideas', component: PropertyIdeasComponent
       },
       {
         path: 'admin/allRequests', component: AllRequestsComponent
